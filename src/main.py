@@ -38,13 +38,18 @@ class UpdateMarkerPage(webapp.RequestHandler):
         self.redirect('/editmarker')
         
     def post(self):
-        title = self.request.get('title');
+        key = self.request.get('key')
+        try:
+            entry = Entry.get(key)
+        except:
+            entry = Entry()
+
+        entry.title = self.request.get('title');
         lat_str = self.request.get('lat');
         lng_str = self.request.get('lng');
-        latlng = GeoPt(float(lat_str), float(lng_str))
-        content = self.request.get('content');
+        entry.latlng = GeoPt(float(lat_str), float(lng_str))
+        entry.content = self.request.get('content');
         
-        entry = Entry(title=title, latlng=latlng, content=content, schema_version=1)
         entry.put()
         
         self.redirect('/editmarker')
