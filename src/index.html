@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Hello world in Google Maps API version3</title>
+    <meta name="viewport" content"initial-scale=1.0, user-scaleable=no" />
+    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+	<!--
+	google.load("maps", "3",  {other_params:"sensor=false"});
+	google.load("jquery", "1.4.2");
+
+	var map = null;
+	
+	function initialize() {
+		var lat = 35.690625;
+		var lng = 139.699788;
+		var centerPos = new google.maps.LatLng(lat, lng);
+        var mapOptions = {
+        	zoom : 18,
+        	center : centerPos,
+        	mapTypeId : google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+		jQuery.get("/json", {}, function(data) {
+			var obj = eval("("+data+")");
+			for( var i=0; i<obj.datas.length; i++) {
+				var entry = obj.datas[i];
+				var marker = reProductionMarker(entry);
+			}
+
+		});
+	}
+
+	function reProductionMarker(entry) {
+		var latlng = new google.maps.LatLng(parseFloat(entry.lat), parseFloat(entry.lng));
+		var marker = new google.maps.Marker({position: latlng, map: map, title: entry.title});
+		google.maps.event.addListener(marker, "click", function() {
+			var infowindow = new google.maps.InfoWindow({content: entry.content});
+			infowindow.open(map, marker);
+		});
+		return marker;
+	}
+	
+	//-->
+
+    </script>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%;height:100%"></div>
+  </body>
+</html>

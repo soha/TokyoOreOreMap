@@ -1,0 +1,5 @@
+{datas:[
+{% for entry in entries %}
+	{key:"{{ entry.key }}", title:"{{ entry.title }}",lat:{{ entry.latlng.lat }},lng:{{ entry.latlng.lon }},content:"{{ entry.content }}"},
+{% endfor %}
+]}
