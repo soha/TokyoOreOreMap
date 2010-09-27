@@ -11,8 +11,8 @@
 	var map = null;
 	
 	function initialize() {
-		var lat = 35.690625;
-		var lng = 139.699788;
+		var lat = {{ lat }};
+		var lng = {{ lng }};
 		var centerPos = new google.maps.LatLng(lat, lng);
         var mapOptions = {
         	zoom : 18,
@@ -54,6 +54,8 @@
 		document.getElementById("content_content").innerHTML = entry.content;
 		document.getElementById("content_lat").value = entry.lat;
 		document.getElementById("content_lng").value = entry.lng;
+		document.getElementById("content_delete_lat").value = entry.lat;
+		document.getElementById("content_delete_lng").value = entry.lng;
 		var content = document.getElementById("marker_content");
 		content = content.cloneNode(true); //ウィンドウを閉じるときにエレメントが消去されるためクローンノードを使う
 		content.style.display = 'block';
@@ -85,6 +87,8 @@
     	</form>
     	<form method="post" action="/deletemarker">
     		<input type="hidden" id="content_delete_key" name="key" value="">
+    		<input type="hidden" id="content_delete_lat" name="lat" value="">
+    		<input type="hidden" id="content_delete_lng" name="lng" value="">
     		<input type="submit" value="削除">
     	</form>
     </div> 

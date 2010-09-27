@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-import os
+import os, urllib
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 from google.appengine.ext.db import GeoPt
@@ -27,7 +27,15 @@ class MainPage(webapp.RequestHandler):
 class EditMarkerPage(webapp.RequestHandler):
     
     def get(self):
+        lat = self.request.get('lat')
+        lng = self.request.get('lng')
+        if not lat or not lng:
+            lat = 35.690625
+            lng = 139.699788
+ 
         template_values = {}
+        template_values['lat'] = lat
+        template_values['lng'] = lng
         path = os.path.join(os.path.dirname(__file__),'edit_marker.html')
         self.response.out.write(template.render(path,template_values))
 
@@ -52,7 +60,8 @@ class UpdateMarkerPage(webapp.RequestHandler):
         
         entry.put()
         
-        self.redirect('/editmarker')
+        params = urllib.urlencode({'lat':lat_str, 'lng':lng_str})
+        self.redirect('/editmarker?'+params)
 
 
 class DeleteMarkerPage(webapp.RequestHandler):
@@ -62,13 +71,18 @@ class DeleteMarkerPage(webapp.RequestHandler):
         
     def post(self):
         key = self.request.get('key');
+        lat_str = self.request.get('lat');
+        lng_str = self.request.get('lng');
+
         try:
             entry = Entry.get(key)
             entry.delete()
         except:
             pass
         
-        self.redirect('/editmarker')
+        
+        params = urllib.urlencode({'lat':lat_str, 'lng':lng_str})
+        self.redirect('/editmarker?'+params)
 
 
 
