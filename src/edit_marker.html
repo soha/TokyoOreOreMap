@@ -51,7 +51,7 @@
 		document.getElementById("content_update_key").value = entry.key
 		document.getElementById("content_delete_key").value = entry.key
 		document.getElementById("content_title").value = entry.title;
-		document.getElementById("content_content").innerHTML = entry.content;
+		document.getElementById("content_content").innerHTML = entry.content.replace(/<BR>/g,"\r\n");
 		document.getElementById("content_lat").value = entry.lat;
 		document.getElementById("content_lng").value = entry.lng;
 		document.getElementById("content_delete_lat").value = entry.lat;

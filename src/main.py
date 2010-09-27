@@ -14,6 +14,9 @@ class Entry(db.Model):
     created = db.DateTimeProperty(auto_now_add=True)
     updated = db.DateTimeProperty(auto_now=True)
     schema_version = db.IntegerProperty()
+    
+    def escapsed_content(self):
+        return self.content.replace('\r\n', '<BR>').replace('"', '&quot;')
 
 
 class MainPage(webapp.RequestHandler):
@@ -56,7 +59,7 @@ class UpdateMarkerPage(webapp.RequestHandler):
         lat_str = self.request.get('lat');
         lng_str = self.request.get('lng');
         entry.latlng = GeoPt(float(lat_str), float(lng_str))
-        entry.content = self.request.get('content');
+        entry.content = self.request.get('content')
         
         entry.put()
         
