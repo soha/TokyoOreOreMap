@@ -67,6 +67,26 @@ class UpdateMarkerPage(webapp.RequestHandler):
         self.redirect('/editmarker?'+params)
 
 
+class UpdateMarkerAsyncPage(webapp.RequestHandler):
+    
+    def get(self):
+        self.redirect('/editmarker')
+        
+    def post(self):
+
+        entry = Entry()
+        entry.title = self.request.get('title');
+        lat_str = self.request.get('lat');
+        lng_str = self.request.get('lng');
+        entry.latlng = GeoPt(float(lat_str), float(lng_str))
+        #entry.content = self.request.get('content')
+        
+        entry.put()
+        key = entry.key()
+        
+        self.response.out.write(key)
+
+
 class DeleteMarkerPage(webapp.RequestHandler):
     
     def get(self):
@@ -110,6 +130,7 @@ class JsonPage(webapp.RequestHandler):
 application = webapp.WSGIApplication([('/', MainPage),
                                       ('/editmarker', EditMarkerPage),
                                       ('/updatemarker', UpdateMarkerPage),
+                                      ('/updatemarker_async', UpdateMarkerAsyncPage),
                                       ('/deletemarker', DeleteMarkerPage),
                                       ('/json', JsonPage),
                                       ], debug=True)
